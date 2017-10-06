@@ -14,7 +14,7 @@ while IFS='=' read -r -d '' key value; do
     echo $value >> /usr/share/nginx/html/apps.csv
     sed -e s#DOMAIN#"${nameAndDomainAndForward[1]}"#g -e s#FORWARD#"${nameAndDomainAndForward[2]}"#g /phovea/templates/caleydoapp.in.conf > /etc/nginx/conf.d/${nameAndDomainAndForward[1]}_app.conf
     cat /etc/nginx/conf.d/${nameAndDomainAndForward[1]}_app.conf
-    domains="$domains -d ${nameAndDomainAndForward[1]}.caleydoapp.org"
+    domains="$domains -d ${nameAndDomainAndForward[1]}.app.datavisyn.io"
   fi
   if [[ $key == PHOVEA_FORWARD_* ]] ; then
     IFS=';'; nameAndDomainAndForward=($value); unset IFS;
@@ -48,13 +48,13 @@ chown nginx:nginx /var/tmp/nginx
 
 # for testing add the --staging param
 echo "Domains to use: ${domains}"
-echo "certbot certonly -d caleydoapp.org ${domains} \
+echo "certbot certonly -d datavisyn.io ${domains} \
   --standalone --text \
   --email ${EMAIL} --agree-tos \
   --expand " > /etc/nginx/lets
-  
+
   echo "Running initial certificate request... "
-  cat /etc/nginx/lets 
+  cat /etc/nginx/lets
 /bin/bash /etc/nginx/lets
 
 #Create the renewal directory (containing well-known challenges)
