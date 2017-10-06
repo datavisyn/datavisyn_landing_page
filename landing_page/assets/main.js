@@ -193,7 +193,7 @@
         if (url.includes('//')) {
           return url;
         }
-        return `//${url}.caleydoapp.org`;
+        return `//${url}.app.datavisyn.io`;
       };
       const list = appList
         .split('\n')
