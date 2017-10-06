@@ -55,24 +55,24 @@ echo "certbot certonly -d datavisyn.io ${domains} \
 
   echo "Running initial certificate request... "
   cat /etc/nginx/lets
-/bin/bash /etc/nginx/lets
+# /bin/bash /etc/nginx/lets
 
 #Create the renewal directory (containing well-known challenges)
 mkdir -p /etc/letsencrypt/webrootauth/
 
 # Template a cronjob to renew certificate with the webroot authenticator
 echo "Creating a cron job to keep the certificate updated"
-  cat <<EOF >/etc/periodic/weekly/renew
+#   cat <<EOF >/etc/periodic/weekly/renew
 #!/bin/sh
 # First renew certificate, then reload nginx config
-certbot renew --webroot --webroot-path /etc/letsencrypt/webrootauth/ --post-hook "/usr/sbin/nginx -s reload"
-EOF
+# certbot renew --webroot --webroot-path /etc/letsencrypt/webrootauth/ --post-hook "/usr/sbin/nginx -s reload"
+# EOF
 
-chmod +x /etc/periodic/weekly/renew
+# chmod +x /etc/periodic/weekly/renew
 
 # Kick off cron to reissue certificates as required
 # Background the process and log to stderr
-/usr/sbin/crond -f -d 8 &
+# /usr/sbin/crond -f -d 8 &
 
 echo Ready
 # Launch nginx in the foreground
