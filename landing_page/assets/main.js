@@ -6,7 +6,7 @@
    * Release channels that should be shown, if no URL hash is set
    * Modify the URL hash to show specific categories (e.g., `#stable,daily`, `#all`)
    */
-  const DEFAULT_RELEASE_CHANNELS = ['stable', 'daily', 'develop'];
+  const DEFAULT_RELEASE_CHANNELS = ['stable'];
   const rcFromHash = location.hash.substr(1).split(',');
   const showReleaseChannels = (location.hash.substr(1).length > 0 && rcFromHash.length > 0) ? rcFromHash : DEFAULT_RELEASE_CHANNELS;
 
