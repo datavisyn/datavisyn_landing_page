@@ -5,7 +5,7 @@ LABEL maintainer="samuel.gratzl@datavisyn.io"
 # customization
 
 RUN apk add --update bash \
-  certbot python-pip \
+  certbot py-pip \
   openssl openssl-dev ca-certificates \
   && pip install --no-cache-dir certbot \
   && rm -rf /var/cache/apk/*
