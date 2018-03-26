@@ -7,7 +7,7 @@ LABEL maintainer="samuel.gratzl@datavisyn.io"
 RUN apk add --update bash \
   certbot \
   openssl openssl-dev ca-certificates \
-  && pip install --no-cache-dir certbot
+  && pip install --no-cache-dir certbot \
   && rm -rf /var/cache/apk/*
 
 # forward request and error logs to docker log collector
