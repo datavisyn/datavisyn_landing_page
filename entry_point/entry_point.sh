@@ -69,7 +69,7 @@ echo "Creating a cron job to keep the certificate updated"
  certbot renew --webroot --webroot-path /etc/letsencrypt/webrootauth/ --post-hook "/usr/sbin/nginx -s reload"
 EOF
 
-chmod +x /etc/periodic/weekly/renew
+chmod +x /etc/periodic/monthly/renew
 
 # Kick off cron to reissue certificates as required
 # Background the process and log to stderr
