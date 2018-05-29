@@ -50,7 +50,7 @@ chown nginx:nginx /var/tmp/nginx
 #  -d api.datavisyn.io -d wiki.datavisyn.io
 echo "Domains to use: ${domains}"
 echo "certbot certonly -d app2.datavisyn.io ${domains} \
-  --standalone --text --staging  \
+  --standalone --text  \
   --email ${EMAIL} --agree-tos \
   --expand " > /etc/nginx/lets
 
