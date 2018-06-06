@@ -47,9 +47,8 @@ mkdir -p /var/tmp/nginx
 chown nginx:nginx /var/tmp/nginx
 
 # for testing add the --staging param
-#  -d api.datavisyn.io -d wiki.datavisyn.io
 echo "Domains to use: ${domains}"
-echo "certbot certonly -d app.datavisyn.io ${domains} \
+echo "certbot certonly -d app.datavisyn.io -d api.datavisyn.io -d wiki.datavisyn.io ${domains} \
   --standalone --text  \
   --email ${EMAIL} --agree-tos \
   --expand " > /etc/nginx/lets
