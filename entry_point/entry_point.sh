@@ -14,7 +14,7 @@ while IFS='=' read -r -d '' key value; do
     echo $value >> /usr/share/nginx/html/apps.csv
     sed -e s#DOMAIN#"${nameAndDomainAndForward[1]}"#g -e s#FORWARD#"${nameAndDomainAndForward[2]}"#g /phovea/templates/caleydoapp.in.conf > /etc/nginx/conf.d/${nameAndDomainAndForward[1]}_app.conf
     cat /etc/nginx/conf.d/${nameAndDomainAndForward[1]}_app.conf
-    domains="$domains -d ${nameAndDomainAndForward[1]}.app2.datavisyn.io"
+    domains="$domains -d ${nameAndDomainAndForward[1]}.app.datavisyn.io"
   fi
   if [[ $key == PHOVEA_FORWARD_* ]] ; then
     IFS=';'; nameAndDomainAndForward=($value); unset IFS;
@@ -49,7 +49,7 @@ chown nginx:nginx /var/tmp/nginx
 # for testing add the --staging param
 #  -d api.datavisyn.io -d wiki.datavisyn.io
 echo "Domains to use: ${domains}"
-echo "certbot certonly -d app2.datavisyn.io ${domains} \
+echo "certbot certonly -d app.datavisyn.io ${domains} \
   --standalone --text  \
   --email ${EMAIL} --agree-tos \
   --expand " > /etc/nginx/lets
