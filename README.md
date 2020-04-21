@@ -1,4 +1,11 @@
 # Datavisyn Landing Page 
+was originally forked by the phovea_landing_page 
+
+The landing page makes the following:
+1. creates a static app page (app.datavisyn.io) and lists all applications configured as environment variables with PHOVEA_APP_<NAME>
+2. make proxy forwards for all of the apps (configured by the environment variables PHOVEA_APP_<NAME>)
+3. creates a proxy forward for wiki.datavisyn.io (routes to wiki:8100)
+4. creates certificates for all of the applications and wiki with certbot
 
 Is now used in our gcloud infrastructure
 
