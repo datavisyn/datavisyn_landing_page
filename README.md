@@ -1,12 +1,8 @@
-# Phovea Landing Page [![Phovea][phovea-image]][phovea-url]
+# Datavisyn Landing Page 
 
-This repository contains the Dockerfile for creating the caleydoapp.org landing page nginx server. In addition, this server also proxies to the various caleydoapp.org pages based on environment variables.
+Is now used in our gcloud infrastructure
 
-***
-
-<a href="https://caleydo.org"><img src="http://caleydo.org/assets/images/logos/caleydo.svg" align="left" width="200px" hspace="10" vspace="6"></a>
-This repository is part of **[Phovea](http://phovea.caleydo.org/)**, a platform for developing web-based visualization applications. For tutorials, API docs, and more information about the build and deployment process, see the [documentation page](http://caleydo.org/documentation/).
-
-
-[phovea-image]: https://img.shields.io/badge/Phovea-DevTools-lightgrey.svg
-[phovea-url]: https://phovea.caleydo.org
+To use it, please do the following:
+1. Login to the gcloud docker with: docker login (or use the right docker config file)
+2. Build the image with the right tag: docker build -t <IMAGE-TAG-NAME> . (f.e. gcr.io/app-cluster-205012/github-datavisyn-datavisyn_landing_page)
+3. Push the image to the gcloud container registry: docker push <IMAGE-TAG-NAME>
