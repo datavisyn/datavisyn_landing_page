@@ -47,11 +47,20 @@ mkdir -p /var/tmp/nginx
 chown nginx:nginx /var/tmp/nginx
 
 # for testing add the --staging param
+# non-interactive: Run without ever asking for user input
+# force renewal: Renew certificate, even if there is one. Also implies --expand. Used instead of keep because I think the certificate is not always available in the container (e.g. when a new container is created).
+# standalone: certbot will run a webserver
+# email: contact info in certificate
+# agree-tos: dont ask on stdin if we agree TOS
+# Note: for testing add the --staging param
+# Also see: https://certbot.eff.org/docs/using.html#certbot-command-line-options
 echo "Domains to use: ${domains}"
 echo "certbot certonly -d app.datavisyn.io -d api.datavisyn.io -d wiki.datavisyn.io ${domains} \
-  --standalone --text  \
-  --email ${EMAIL} --agree-tos \
-  --expand " > /etc/nginx/lets
+  --non-interactive \
+  --force-renewal \
+  --standalone \
+  --email ${EMAIL} \
+  --agree-tos " > /etc/nginx/lets
 
   echo "Running initial certificate request... "
   cat /etc/nginx/lets
