@@ -3,12 +3,12 @@
 (function () {
 
   /**
-   * Release channels that should be shown, if no URL hash is set
+   * Release types that should be shown, if no URL hash is set
    * Modify the URL hash to show specific categories (e.g., `#stable,daily`, `#all`)
    */
-  const DEFAULT_RELEASE_CHANNELS = ['stable'];
+  const DEFAULT_RELEASE_TYPES = ['stable'];
   const rcFromHash = location.hash.substr(1).split(',');
-  const showReleaseChannels = (location.hash.substr(1).length > 0 && rcFromHash.length > 0) ? rcFromHash : DEFAULT_RELEASE_CHANNELS;
+  const showReleaseTypes = (location.hash.substr(1).length > 0 && rcFromHash.length > 0) ? rcFromHash : DEFAULT_RELEASE_TYPES;
 
   function buildList(appList) {
     const list = document.querySelectorAll('ul.list')[0];
@@ -17,13 +17,13 @@
       list.insertAdjacentHTML('beforeend', `<li class="loading"></li>`);
       const elem = list.lastElementChild;
       elem.innerHTML = `
-      <a class="appinfo ${app.releaseChannel}" href="${app.url}">
+      <a class="appinfo ${app.releaseType}" href="${app.url}">
         <span class="screenshot"></span>
-        <span class="name">${app.name}</span>
+        <span class="title">${app.title}</span>
         <span class="description"></span>
         <span class="metadata">
           <span class="version"></span>
-          <span class="releaseChannel ${app.releaseChannel}">${app.releaseChannel}</span>
+          <span class="releaseType ${app.releaseType}">${app.releaseType}</span>
         </span>
       </a>`;
 
@@ -35,7 +35,7 @@
 
   function enhanceAppItem(app, elem) {
     //return self.fetch(`phoveaMetaData.json`)
-    return self.fetch(`${app.url}/phoveaMetaData.json`)
+    return fetch(`${app.url}/phoveaMetaData.json`)
       .then((response) => {
         elem.classList.remove('loading');
         if(response.ok) {
@@ -62,7 +62,7 @@
 
   function searchableList() {
     const options = {
-      valueNames: ['name', 'description', 'releaseChannel']
+      valueNames: ['title', 'description', 'releaseType']
     };
     const className = 'active';
 
@@ -189,26 +189,19 @@
       throw new Error('Network response was not ok');
     })
     .then((appList) => {
-      const toUrl = (url) => {
-        if (url.includes('//')) {
-          return url;
-        }
-        return `//${url}.app.datavisyn.io`;
-      };
       const list = appList
         .split('\n')
         .filter((d) => d.trim().length > 0)
         .map((row) => {
           const cols = row.split(';');
           return {
-            name: cols[0],
-            url: toUrl(cols[1]),
-            cluster: cols[2],
-            releaseChannel: cols[3] // stable, beta, ...
+            title: cols[0],
+            url: cols[1],
+            releaseType: cols[2] // stable, beta, ...
           };
         })
-        .filter((app) => showReleaseChannels.indexOf('all') > -1 || showReleaseChannels.indexOf(app.releaseChannel) > -1)
-        .sort(firstBy('releaseChannel', -1).thenBy('name'));
+        .filter((app) => showReleaseTypes.indexOf('all') > -1 || showReleaseTypes.indexOf(app.releaseType) > -1)
+        .sort(firstBy('releaseType', -1).thenBy('title'));
       buildList(list)
         .then(() => {
           if(searchableAppsList) {
