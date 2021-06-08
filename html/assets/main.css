@@ -147,7 +147,7 @@ ul.list li .screenshot {
   background-position: center;
   background-repeat: no-repeat;
   background-size: 25%;
-  background-image: url(datavisyn_logo.svg);
+  background-image: url(./icons/datavisyn_logo.svg);
   transition: background 0.2s ease-in-out;
   width: 100%;
   height: 150px;
