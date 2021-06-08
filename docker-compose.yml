@@ -4,6 +4,7 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile
+    user: "www-data:www-data"  
     ports:
       - '8089:8080'
     volumes:
