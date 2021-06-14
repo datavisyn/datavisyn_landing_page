@@ -17,16 +17,21 @@
       list.insertAdjacentHTML('beforeend', `<li class="loading"></li>`);
       const elem = list.lastElementChild;
       elem.innerHTML = `
-      <a class="appinfo ${app.releaseType}" href="${app.url}">
-        <span class="screenshot"></span>
-        <span class="title">${app.title}</span>
-        <span class="description"></span>
-        <span class="metadata">
-          <span class="version"></span>
-          <span class="releaseType ${app.releaseType}">${app.releaseType}</span>
-        </span>
-      </a>`;
-
+      <div class="card shadow-sm">
+        <a href="${app.url}" class="screenshot"></a>
+        <div class="card-body">
+          <h5 class="card-title title">${app.title}</h5>
+          <p class="card-text description"></p>
+          <div class="custom-card-footer mt-auto">
+            <span class="metadata text-muted">
+              <span class="version"></span>
+              <span class="mx-2">|</span>
+              <span class="releaseType ${app.releaseType}">${app.releaseType}</span>
+            </span>
+            <a href="${app.url}" class="btn btn-light">Launch app</a>
+          </div>
+        </div>
+      </div>`;
       return enhanceAppItem(app, elem);
     });
 
@@ -44,12 +49,15 @@
         throw new Error('Network response was not ok');
       })
       .then((data) => {
-        elem.querySelector('.description').innerText = data.description;
+        elem.querySelector('.card-text').innerText = data.description;
         elem.querySelector('.version').innerText = data.version;
 
         if(data.screenshot) {
           elem.querySelector('.screenshot').classList.add('is-set');
-          elem.querySelector('.screenshot').setAttribute('style', `background-image:url(${data.screenshot});`);
+          // elem.querySelector('.screenshot').setAttribute('src', `${data.screenshot}`);
+          const image = document.createElement('img');
+          image.setAttribute('src', `${data.screenshot}`);
+          elem.querySelector('.screenshot').appendChild(image);
         }
       })
       .catch((error) => {
@@ -95,7 +103,6 @@
     // update cursor and trigger enter
     search.onkeyup = (e) => {
       const keynum = getKey(e);
-
       list.classList.remove('nothing-found');
 
       if (searchableAppsList.visibleItems.length === 0) {
@@ -120,7 +127,7 @@
 
       if (keynum === ENTER && selectedItem !== null) {
         //console.log(selectedItem.getAttribute('href'));
-        window.location.href = selectedItem.firstElementChild.getAttribute('href');
+        window.location.href = selectedItem.getElementsByTagName("a")[0].getAttribute('href');
       }
     };
 
@@ -201,7 +208,7 @@
           };
         })
         .filter((app) => showReleaseTypes.indexOf('all') > -1 || showReleaseTypes.indexOf(app.releaseType) > -1)
-        .sort(firstBy('releaseType', -1).thenBy('title'));
+        .sort(firstBy('title', -1).thenBy('releaseType'));
       buildList(list)
         .then(() => {
           if(searchableAppsList) {

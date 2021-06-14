@@ -2,7 +2,7 @@ FROM nginx:1.17-alpine
 
 LABEL maintainer="contact@datavisyn.io"
 
-ENV LANDING_PAGE_TITLE='Datavisyn Applications'
+ENV LANDING_PAGE_TITLE='applications'
 
 #copy static page
 COPY ./conf.d/nginx.conf /etc/nginx/nginx.conf
