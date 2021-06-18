@@ -6,7 +6,7 @@
    * Release types that should be shown, if no URL hash is set
    * Modify the URL hash to show specific categories (e.g., `#stable,daily`, `#all`)
    */
-  const DEFAULT_RELEASE_TYPES = ['stable'];
+  const DEFAULT_RELEASE_TYPES = ['all'];
   const rcFromHash = location.hash.substr(1).split(',');
   const showReleaseTypes = (location.hash.substr(1).length > 0 && rcFromHash.length > 0) ? rcFromHash : DEFAULT_RELEASE_TYPES;
 
@@ -32,7 +32,7 @@
           </div>
         </div>
       </div>`;
-      return enhanceAppItem(app, elem);
+      return app.releaseType == 'external' ? Promise.resolve() : enhanceAppItem(app, elem);
     });
 
     return Promise.all(enhancePromises);
@@ -208,7 +208,7 @@
           };
         })
         .filter((app) => showReleaseTypes.indexOf('all') > -1 || showReleaseTypes.indexOf(app.releaseType) > -1)
-        .sort(firstBy('title', -1).thenBy('releaseType'));
+        .sort(firstBy('releaseType', -1).thenBy('title', -1));
       buildList(list)
         .then(() => {
           if(searchableAppsList) {
