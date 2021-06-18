@@ -1,0 +1,259 @@
+body {
+  font-family: Yantramanav, sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  text-rendering: optimizeLegibility;
+  font-size: 16px;
+  background-color: #f1f1f8;
+}
+
+.container {
+  max-width: 60%;
+  margin: 0 auto;
+}
+
+header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+h1 {
+  -webkit-user-select: none;
+  /* Chrome all / Safari all */
+  -moz-user-select: none;
+  /* Firefox all */
+  -ms-user-select: none;
+  /* IE 10+ */
+  user-select: none;
+  /* Likely future */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2.9rem;
+}
+
+.keyboard-navigation-hint, .form-group {
+  width: 100%;
+  max-width: 700px;
+}
+
+.keyboard-navigation-hint {
+  display: flex;
+  justify-content: flex-end;
+}
+
+ul.list {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-gap: 20px;
+  justify-items: stretch;
+  justify-content: stretch;
+  align-content: stretch;
+  list-style: none;
+}
+
+@media (max-width: 1800px) {
+  ul.list {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+  .container {
+    max-width: 70%;
+  }
+}
+
+@media (max-width: 1130px) {
+  ul.list {
+    grid-template-columns: 1fr 1fr;
+  }
+  .container {
+    max-width: 80%;
+  }
+}
+
+@media (max-width: 670px) {
+  ul.list {
+    grid-template-columns: 1fr;
+  }
+  .container {
+    max-width: 95%;
+  }
+  header {
+    flex-direction: column;
+  }
+}
+
+ul.list.loading,
+ul.list.loading-error,
+ul.list.nothing-found {
+  grid-template-columns: 1fr;
+}
+
+ul.list.loading:after,
+ul.list.loading-error:after,
+ul.list.nothing-found:after {
+  margin: 50px 0;
+  font-size: 1.3em;
+  font-weight: 300;
+  color: #999;
+}
+
+ul.list.loading:after {
+  content: "Loading apps...";
+}
+
+ul.list.loading-error:after {
+  color: #999;
+  content: "An error occured while loading the app list!";
+}
+
+ul.list.nothing-found:after {
+  content: "Your search did not match any apps.";
+}
+
+ul.list li .screenshot {
+  background-color: #ddd;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 25%;
+  background-image: url(./icons/datavisyn_logo.svg);
+  transition: background 0.2s ease-in-out;
+  width: 100%;
+  height: 150px;
+  opacity: 0.5;
+  overflow: hidden;
+}
+
+ul.list li .screenshot.is-set {
+  background-size: 100%;
+  opacity: 1;
+}
+
+ul.list li .name {
+  display: block;
+  font-weight: 500;
+  font-size: 150%;
+}
+
+@keyframes blink {
+  0% {
+    opacity: 1;
+  }
+
+  60% {
+    opacity: 0;
+  }
+}
+
+ul.list li .metadata {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+ul.list li .version {
+  transition: color 0.2s ease-in-out;
+}
+
+ul.list li .version:not(:empty):before {
+  content: "v";
+  font-weight: 500;
+}
+
+ul.list li .releaseChannel {
+  padding: 2px;
+  border: 1px solid;
+  text-transform: lowercase;
+  transition: opacity 0.2s ease-in-out;
+  opacity: 0.5;
+}
+
+ul.list li .releaseChannel.daily,
+ul.list li .releaseChannel.develop {
+  color: #f47d20;
+  border-color: #f47d20;
+}
+
+ul.list li .releaseChannel.external {
+  color: #444;
+  border-color: #999;
+}
+
+footer {
+  font-size: 0.9em;
+}
+
+footer a {
+  color: #252759;
+  text-decoration: none;
+  transition: 0.3s ease-in-out;
+}
+
+footer a:active,
+footer a:focus,
+footer a:hover {
+  color: #337ab7;
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.card {
+  height: 100%;
+  width: 100%;
+}
+
+.btn-light {
+  margin-top: auto;
+  align-self: flex-start;
+  color: #212529;
+  background-color: #f1f2f4;
+  border-color: #f1f2f4;
+  transition: 0.3s;
+}
+
+.card:hover .btn-light, ul li.active .btn-light,
+.btn-light.focus, .btn-light:focus, .btn-light:hover {
+  color: #fff;
+  background-color: #337ab7;
+  border-color: #337ab7;
+}
+
+.custom-card-footer {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+}
+
+
+
+.screenshot.is-set {
+  display: flex;
+}
+.screenshot.is-set img {
+  width: 100%;
+}
+
+ul.list {
+  padding-left: 0;
+}
+
+ul.list li {
+  display: flex;
+}
+
+ul li.active > .card, .card:hover {
+  box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
+  transition: 0.3s;
+}
+
+#apps {
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

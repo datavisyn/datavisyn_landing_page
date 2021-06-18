@@ -1,32 +1,24 @@
-FROM nginx:alpine
+FROM nginx:1.17-alpine
 
-LABEL maintainer="samuel.gratzl@datavisyn.io"
+LABEL maintainer="contact@datavisyn.io"
 
-# customization
-
-RUN apk add --update bash \
-  certbot \
-  openssl openssl-dev ca-certificates \
-&& rm -rf /var/cache/apk/*
-
-# forward request and error logs to docker log collector
-RUN ln -sf /dev/stdout /var/log/nginx/access.log
-RUN ln -sf /dev/stderr /var/log/nginx/error.log
-
-ENV EMAIL=office@datavisyn.io
-
-EXPOSE 80
-EXPOSE 443
+ENV LANDING_PAGE_TITLE='applications'
 
 #copy static page
-COPY landing_page /usr/share/nginx/html
-# enable gzip
-COPY *.conf /etc/nginx/conf.d/
-# custom entry
-COPY entry_point /phovea/
+COPY ./conf.d/nginx.conf /etc/nginx/nginx.conf
+COPY ./conf.d/nginx-default.conf /etc/nginx/conf.d/default.conf
+COPY ./html /usr/share/nginx/html
 
-# change security
-RUN chmod +x /phovea/entry_point.sh
+RUN touch /var/run/nginx.pid && \
+  adduser -D -H -u 1000 -s /bin/bash www-data -G www-data && \
+  chown -R www-data:www-data /var/run/nginx.pid && \
+  chown -R www-data:www-data /var/cache/nginx && \
+  chown -R www-data:www-data /var/log/nginx && \
+  chmod -R a+rw /etc/nginx/ && chmod -R a+rw /tmp/ && \
+  chmod -R a+rw /usr/share/nginx/html/
 
-ENTRYPOINT ["/phovea/entry_point.sh"]
-CMD ["/usr/sbin/nginx", "-g", "daemon off;"]
+USER www-data
+
+EXPOSE 8080
+
+CMD sed -i -e "s/LANDING_PAGE_TITLE/${LANDING_PAGE_TITLE}/g" /usr/share/nginx/html/index.html && nginx -g 'daemon off;'

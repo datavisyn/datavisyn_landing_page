@@ -1,0 +1,24 @@
+version: 2.1
+
+orbs:
+  aws-ecr: circleci/aws-ecr@6.14.0
+workflows:
+  version: 2.1
+#  build-nightly:
+#    triggers:
+#      - schedule:
+#          cron: "15 1 * * 1-5" # "At 01:15 on every day-of-week from Monday through Friday.”, see: https://crontab.guru/#15_1_*_*_1-5
+#          filters:
+#            branches:
+#              only:
+#                - develop
+#    jobs:
+#      - build
+  build-branch:
+    jobs:
+      - aws-ecr/build-and-push-image:
+          context:
+              - org-global
+          dockerfile: Dockerfile
+          repo: "${ORGANIZATION_NAME}/${CIRCLE_PROJECT_REPONAME}"
+          tag: "${CIRCLE_BRANCH}"

@@ -3,12 +3,12 @@
 (function () {
 
   /**
-   * Release channels that should be shown, if no URL hash is set
+   * Release types that should be shown, if no URL hash is set
    * Modify the URL hash to show specific categories (e.g., `#stable,daily`, `#all`)
    */
-  const DEFAULT_RELEASE_CHANNELS = ['stable'];
+  const DEFAULT_RELEASE_TYPES = ['all'];
   const rcFromHash = location.hash.substr(1).split(',');
-  const showReleaseChannels = (location.hash.substr(1).length > 0 && rcFromHash.length > 0) ? rcFromHash : DEFAULT_RELEASE_CHANNELS;
+  const showReleaseTypes = (location.hash.substr(1).length > 0 && rcFromHash.length > 0) ? rcFromHash : DEFAULT_RELEASE_TYPES;
 
   function buildList(appList) {
     const list = document.querySelectorAll('ul.list')[0];
@@ -17,17 +17,22 @@
       list.insertAdjacentHTML('beforeend', `<li class="loading"></li>`);
       const elem = list.lastElementChild;
       elem.innerHTML = `
-      <a class="appinfo ${app.releaseChannel}" href="${app.url}">
-        <span class="screenshot"></span>
-        <span class="name">${app.name}</span>
-        <span class="description"></span>
-        <span class="metadata">
-          <span class="version"></span>
-          <span class="releaseChannel ${app.releaseChannel}">${app.releaseChannel}</span>
-        </span>
-      </a>`;
-
-      return enhanceAppItem(app, elem);
+      <div class="card shadow-sm">
+        <a href="${app.url}" class="screenshot"></a>
+        <div class="card-body">
+          <h5 class="card-title title">${app.title}</h5>
+          <p class="card-text description"></p>
+          <div class="custom-card-footer mt-auto">
+            <span class="metadata text-muted">
+              <span class="version"></span>
+              <span class="mx-2">|</span>
+              <span class="releaseType ${app.releaseType}">${app.releaseType}</span>
+            </span>
+            <a href="${app.url}" class="btn btn-light">Launch app</a>
+          </div>
+        </div>
+      </div>`;
+      return app.releaseType == 'external' ? Promise.resolve() : enhanceAppItem(app, elem);
     });
 
     return Promise.all(enhancePromises);
@@ -35,7 +40,7 @@
 
   function enhanceAppItem(app, elem) {
     //return self.fetch(`phoveaMetaData.json`)
-    return self.fetch(`${app.url}/phoveaMetaData.json`)
+    return fetch(`${app.url}/phoveaMetaData.json`)
       .then((response) => {
         elem.classList.remove('loading');
         if(response.ok) {
@@ -44,12 +49,15 @@
         throw new Error('Network response was not ok');
       })
       .then((data) => {
-        elem.querySelector('.description').innerText = data.description;
+        elem.querySelector('.card-text').innerText = data.description;
         elem.querySelector('.version').innerText = data.version;
 
         if(data.screenshot) {
           elem.querySelector('.screenshot').classList.add('is-set');
-          elem.querySelector('.screenshot').setAttribute('style', `background-image:url(${data.screenshot});`);
+          // elem.querySelector('.screenshot').setAttribute('src', `${data.screenshot}`);
+          const image = document.createElement('img');
+          image.setAttribute('src', `${data.screenshot}`);
+          elem.querySelector('.screenshot').appendChild(image);
         }
       })
       .catch((error) => {
@@ -62,7 +70,7 @@
 
   function searchableList() {
     const options = {
-      valueNames: ['name', 'description', 'releaseChannel']
+      valueNames: ['title', 'description', 'releaseType']
     };
     const className = 'active';
 
@@ -95,7 +103,6 @@
     // update cursor and trigger enter
     search.onkeyup = (e) => {
       const keynum = getKey(e);
-
       list.classList.remove('nothing-found');
 
       if (searchableAppsList.visibleItems.length === 0) {
@@ -120,7 +127,7 @@
 
       if (keynum === ENTER && selectedItem !== null) {
         //console.log(selectedItem.getAttribute('href'));
-        window.location.href = selectedItem.firstElementChild.getAttribute('href');
+        window.location.href = selectedItem.getElementsByTagName("a")[0].getAttribute('href');
       }
     };
 
@@ -189,26 +196,19 @@
       throw new Error('Network response was not ok');
     })
     .then((appList) => {
-      const toUrl = (url) => {
-        if (url.includes('//')) {
-          return url;
-        }
-        return `//${url}.app.datavisyn.io`;
-      };
       const list = appList
         .split('\n')
         .filter((d) => d.trim().length > 0)
         .map((row) => {
           const cols = row.split(';');
           return {
-            name: cols[0],
-            url: toUrl(cols[1]),
-            cluster: cols[2],
-            releaseChannel: cols[3] // stable, beta, ...
+            title: cols[0],
+            url: cols[1],
+            releaseType: cols[2] // stable, beta, ...
           };
         })
-        .filter((app) => showReleaseChannels.indexOf('all') > -1 || showReleaseChannels.indexOf(app.releaseChannel) > -1)
-        .sort(firstBy('releaseChannel', -1).thenBy('name'));
+        .filter((app) => showReleaseTypes.indexOf('all') > -1 || showReleaseTypes.indexOf(app.releaseType) > -1)
+        .sort(firstBy('releaseType', -1).thenBy('title', -1));
       buildList(list)
         .then(() => {
           if(searchableAppsList) {

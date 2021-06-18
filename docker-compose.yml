@@ -1,13 +1,11 @@
 version: '2.0'
 services:
-  nginx_test:
-    links:
-      - lineup
-    build: '.'
+  web:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    user: "www-data:www-data"  
     ports:
-      - '80:80'
-    environment:
-      - PHOVEA_APP_LINEUP=LineUp;lineup;lineup
-      - PHOVEA_FORWARD_LINEUP=LineUp;lineup.caleydo.org;www.caleydo.org/tools/lineup
-  lineup:
-    image: nginx:latest
+      - '8089:8080'
+    volumes:
+       - './apps.csv:/usr/share/nginx/html/apps.csv'
