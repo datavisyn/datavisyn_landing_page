@@ -21,4 +21,4 @@ USER www-data
 
 EXPOSE 8080
 
-CMD sed -i -e "s/LANDING_PAGE_TITLE/${LANDING_PAGE_TITLE}/g" /usr/share/nginx/html/index.html && nginx -g 'daemon off;'
+CMD cat /usr/share/nginx/html/index.tmp > /usr/share/nginx/html/index.html && sed -i -e "s/LANDING_PAGE_TITLE/${LANDING_PAGE_TITLE}/g" /usr/share/nginx/html/index.html && nginx -g 'daemon off;'
