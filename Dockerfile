@@ -2,8 +2,6 @@ FROM nginx:1.17-alpine
 
 LABEL maintainer="contact@datavisyn.io"
 
-ENV LANDING_PAGE_TITLE='applications'
-
 #copy static page
 COPY ./conf.d/nginx.conf /etc/nginx/nginx.conf
 COPY ./conf.d/nginx-default.conf /etc/nginx/conf.d/default.conf
@@ -21,4 +19,4 @@ USER www-data
 
 EXPOSE 8080
 
-CMD cat /usr/share/nginx/html/index.html.tmp > /usr/share/nginx/html/index.html && sed -i -e "s/LANDING_PAGE_TITLE/${LANDING_PAGE_TITLE}/g" /usr/share/nginx/html/index.html && nginx -g 'daemon off;'
+CMD nginx -g 'daemon off;'
